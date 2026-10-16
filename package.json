@@ -2,11 +2,13 @@
   "name": "web-playwright",
   "version": "1.0.0",
   "private": true,
-  "description": "Playwright UI tests for saucedemo.com",
+  "description": "Playwright UI and API tests for saucedemo.com and dummyjson.com",
   "author": "Natthaphon",
   "scripts": {
     "test": "playwright test",
     "test:smoke": "playwright test --grep @smoke",
+    "test:api": "playwright test --project=api",
+    "test:e2e": "playwright test --project=login --project=chromium",
     "test:headed": "playwright test --headed --project=chromium",
     "report": "playwright show-report"
   },

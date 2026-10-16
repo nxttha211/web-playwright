@@ -19,6 +19,10 @@ export class ProductsPage {
     };
   }
 
+  async goto() {
+    await this.page.goto('/inventory.html');
+  }
+
   async sortBy(option: 'az' | 'za' | 'lohi' | 'hilo') {
     await this.el.sortDropdown.selectOption(option);
   }

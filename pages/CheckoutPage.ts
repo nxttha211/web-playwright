@@ -16,6 +16,8 @@ export class CheckoutPage {
       finishButton: page.getByTestId('finish'),
       errorMessage: page.getByTestId('error'),
       itemTotal: page.getByTestId('subtotal-label'),
+      tax: page.getByTestId('tax-label'),
+      total: page.getByTestId('total-label'),
       completeHeader: page.getByTestId('complete-header'),
     };
   }

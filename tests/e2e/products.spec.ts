@@ -1,9 +1,8 @@
-import { test, expect } from '../pages/fixtures';
-import { users } from '../data/users';
+import { test, expect } from '../../fixtures';
 
-test.beforeEach(async ({ loginPage }) => {
-  await loginPage.goto(users.url_website);
-  await loginPage.login(users.standard.username, users.standard.password);
+// Already logged in through storageState (see tests/auth.setup.ts)
+test.beforeEach(async ({ productsPage }) => {
+  await productsPage.goto();
 });
 
 test('TC_06 แสดงสินค้าครบ 6 รายการ', { tag: ['@products', '@smoke'] }, async ({ productsPage }) => {
@@ -28,4 +27,14 @@ test('TC_08 เรียงสินค้าตามราคาจากต�
 
   await productsPage.sortBy('lohi');
   await expect(productsPage.el.productPrices).toHaveText(['$7.99', '$9.99', '$15.99', '$15.99', '$29.99', '$49.99']);
+});
+
+// ===== แบบฝึก: เขียนเอง (ลบ test.fixme ออกเมื่อเขียนเสร็จ) =====
+
+test.fixme('TC_16 เรียงราคาจากสูงไปต่ำ (ตรวจด้วย logic ไม่ hardcode)', { tag: ['@products'] }, async ({ productsPage }) => {
+  // TODO
+  // 1. productsPage.sortBy('hilo')
+  // 2. อ่านราคาทั้งหมดด้วย productsPage.el.productPrices.allTextContents()
+  // 3. แปลง '$49.99' -> 49.99
+  // 4. สร้าง array ที่เรียงจากมากไปน้อยเอง แล้วเทียบกับของจริงด้วย toEqual
 });

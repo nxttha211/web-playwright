@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: '0 18 * * *' # every night at 01:00 Bangkok time
   workflow_dispatch:
 
 jobs:
@@ -17,7 +19,17 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npx playwright install --with-deps chromium firefox
-      - run: npx playwright test
+
+      # Pull requests get fast feedback with smoke tests only
+      - name: Smoke tests
+        if: github.event_name == 'pull_request'
+        run: npx playwright test --grep @smoke
+
+      # Pushes to main, the nightly run and manual runs get the full regression
+      - name: Full regression
+        if: github.event_name != 'pull_request'
+        run: npx playwright test
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
