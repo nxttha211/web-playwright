@@ -19,16 +19,16 @@ test('API_02 ใช้ token ดึงข้อมูลผู้ใช้ขอ
 
 // ===== แบบฝึก: เขียนเอง (ลบ test.fixme ออกเมื่อเขียนเสร็จ) =====
 
-test.fixme('API_03 login ด้วยรหัสผ่านผิดต้องได้ 400', { tag: ['@api'] }, async ({ authApi }) => {
-  // TODO
-  // 1. เรียก authApi.login() ด้วย username ถูก แต่ password ผิด
-  // 2. ตรวจว่า status เป็น 400
-  // 3. ตรวจว่า body.message มีคำว่า 'Invalid credentials'
+test('API_03 login ด้วยรหัสผ่านผิดต้องได้ 400', { tag: ['@api'] }, async ({ authApi }) => {
+  const res = await authApi.login(apiUsers.emily.username, 'wrong-password');
+  expect(res.status()).toBe(400);
+  const body = await res.json();
+  expect(body.message).toContain('Invalid credentials');
 });
 
-test.fixme('API_04 token ผิดต้องได้ 401', { tag: ['@api'] }, async ({ authApi }) => {
-  // TODO
-  // 1. เรียก authApi.me() ด้วย token มั่ว เช่น 'not-a-real-token'
-  // 2. ตรวจว่า status เป็น 401
-  // คำถามชวนคิด: 401 กับ 403 ต่างกันอย่างไร
+test('API_04 token ผิดต้องได้ 401', { tag: ['@api'] }, async ({ authApi }) => {
+  const res = await authApi.me('not-a-real-token');
+  expect(res.status()).toBe(401);
+  const body = await res.json();
+  expect(body.message).toBe('Invalid/Expired Token!');
 });

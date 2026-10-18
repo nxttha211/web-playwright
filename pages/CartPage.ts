@@ -16,4 +16,12 @@ export class CartPage {
   async checkout() {
     await this.el.checkoutButton.click();
   }
+
+  async removeItem(name: string) {
+    await this.page
+      .getByTestId('inventory-item')
+      .filter({ hasText: name })
+      .getByRole('button', { name: 'Remove' })
+      .click();
+  }
 }

@@ -28,10 +28,9 @@ test('TC_11 หน้าตะกร้าแสดงสินค้าที�
 
 // ===== แบบฝึก: เขียนเอง (ลบ test.fixme ออกเมื่อเขียนเสร็จ) =====
 
-test.fixme('TC_17 ลบสินค้าจากหน้าตะกร้า', { tag: ['@cart'] }, async ({ productsPage, cartPage }) => {
-  // TODO (ฝึกเพิ่ม locator และ method ใน page object ด้วย)
-  // 1. เพิ่มสินค้า 2 ชิ้น แล้วไปหน้าตะกร้า
-  // 2. ใน pages/CartPage.ts เพิ่ม method removeItem(name: string)
-  //    hint: page.getByTestId('inventory-item').filter({ hasText: name }).getByRole('button', { name: 'Remove' })
-  // 3. ลบ 'Sauce Labs Backpack' แล้วตรวจว่า cartPage.el.itemNames เหลือแค่ ['Sauce Labs Bike Light']
+test('TC_17 ลบสินค้าจากหน้าตะกร้า', { tag: ['@cart'] }, async ({ productsPage, cartPage }) => {
+  await productsPage.addBackpackAndBikeLight();
+  await productsPage.goToCart();
+  await cartPage.removeItem('Sauce Labs Backpack');
+  await expect(cartPage.el.itemNames).toHaveText(['Sauce Labs Bike Light']);
 });

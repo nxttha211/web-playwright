@@ -1,5 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { users } from '../../test-data/users';
+import { parseMoney } from '../../utils/money';
 
 test.beforeEach(async ({ productsPage, cartPage }) => {
   await productsPage.goto();
@@ -30,11 +31,12 @@ test('TC_14 ไม่กรอกรหัสไปรษณีย์', { tag: [
 
 // ===== แบบฝึก: เขียนเอง (ลบ test.fixme ออกเมื่อเขียนเสร็จ) =====
 
-test.fixme('TC_15 ยอดรวมสุดท้ายต้องเท่ากับ item total + tax', { tag: ['@checkout'] }, async ({ checkoutPage }) => {
-  // TODO
-  // 1. checkoutPage.fillInformation(users.customer)
-  // 2. อ่านข้อความจาก checkoutPage.el.itemTotal, el.tax, el.total ด้วย textContent()
-  // 3. ดึงตัวเลขออกจากข้อความ เช่น 'Tax: $3.20' -> 3.2  (ลองเขียน helper ไว้ใน utils/)
-  // 4. ตรวจว่า total ≈ itemTotal + tax ด้วย toBeCloseTo(..., 2)
-  // ทำไมดีกว่าการ hardcode '$43.18'? -> ถ้าราคาสินค้าเปลี่ยน test ยังตรวจ logic ได้ถูก
+test('TC_15 ยอดรวมสุดท้ายต้องเท่ากับ item total + tax', { tag: ['@checkout'] }, async ({ checkoutPage }) => {
+  await checkoutPage.fillInformation(users.customer);
+
+  const itemTotal = parseMoney(await checkoutPage.el.itemTotal.textContent());
+  const tax = parseMoney(await checkoutPage.el.tax.textContent());
+  const total = parseMoney(await checkoutPage.el.total.textContent());
+
+  expect(total).toBeCloseTo(itemTotal + tax, 2);
 });

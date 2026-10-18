@@ -31,10 +31,12 @@ test('TC_08 เรียงสินค้าตามราคาจากต�
 
 // ===== แบบฝึก: เขียนเอง (ลบ test.fixme ออกเมื่อเขียนเสร็จ) =====
 
-test.fixme('TC_16 เรียงราคาจากสูงไปต่ำ (ตรวจด้วย logic ไม่ hardcode)', { tag: ['@products'] }, async ({ productsPage }) => {
-  // TODO
-  // 1. productsPage.sortBy('hilo')
-  // 2. อ่านราคาทั้งหมดด้วย productsPage.el.productPrices.allTextContents()
-  // 3. แปลง '$49.99' -> 49.99
-  // 4. สร้าง array ที่เรียงจากมากไปน้อยเอง แล้วเทียบกับของจริงด้วย toEqual
+test('TC_16 เรียงราคาจากสูงไปต่ำ (ตรวจด้วย logic ไม่ hardcode)', { tag: ['@products'] }, async ({ productsPage }) => {
+  await productsPage.sortBy('hilo');
+
+  const priceTexts = await productsPage.el.productPrices.allTextContents();
+  const prices = priceTexts.map((text) => Number(text.replace('$', '')));
+  const expected = [...prices].sort((a, b) => b - a);
+
+  expect(prices).toEqual(expected);
 });
